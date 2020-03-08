@@ -17,8 +17,4 @@ public class HouseService  {
         return houseDAO.findAll();
     }
 
-
-
-
-
 }

@@ -16,5 +16,17 @@ public class HouseService  {
     public List<House> list() {
         return houseDAO.findAll();
     }
+    //这里参数类型修改成对象了
+    public void deleteById(House house) {
+        houseDAO.deleteById(house.getHouseNumber());
+    }
 
+    public void addOrUpdate(House house) {
+        houseDAO.save(house);
+    }
+
+    //是否type的类型要从int换为house对象？
+    public List<House> list(int type) {
+        return houseDAO.findAllByHouseType(type);
+    }
 }

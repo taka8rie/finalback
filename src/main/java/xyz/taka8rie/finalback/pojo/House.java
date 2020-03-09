@@ -15,9 +15,9 @@ public class House  {
     @Column(name = "house_number")
     int houseNumber;//是否需要改为house_number?
     String houseAddr;
-    String houseType;
+    int houseType;
     int houseArea;
-    String houseStatus;
+    int houseStatus;
     Date lastupdateTime;
     BigDecimal soldPrice;//是否影响金钱精度尚未清楚。
     String addNote;
@@ -39,11 +39,11 @@ public class House  {
         this.houseAddr = houseAddr;
     }
 
-    public String getHouseType() {
+    public int getHouseType() {
         return houseType;
     }
 
-    public void setHouseType(String houseType) {
+    public void setHouseType(int houseType) {
         this.houseType = houseType;
     }
 
@@ -55,11 +55,11 @@ public class House  {
         this.houseArea = houseArea;
     }
 
-    public String getHouseStatus() {
+    public int getHouseStatus() {
         return houseStatus;
     }
 
-    public void setHouseStatus(String houseStatus) {
+    public void setHouseStatus(int houseStatus) {
         this.houseStatus = houseStatus;
     }
 

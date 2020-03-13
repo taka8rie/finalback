@@ -21,7 +21,15 @@ public class House  {
     Date lastupdateTime;
     BigDecimal soldPrice;//是否影响金钱精度尚未清楚。
     String addNote;
+    String houseCover;
 
+    public String getHouseCover() {
+        return houseCover;
+    }
+
+    public void setHouseCover(String houseCover) {
+        this.houseCover = houseCover;
+    }
 
     public int getHouseNumber() {
         return houseNumber;

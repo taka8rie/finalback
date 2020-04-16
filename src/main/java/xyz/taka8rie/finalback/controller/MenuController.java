@@ -25,8 +25,5 @@ public class MenuController {
         return ResultFactory.buildSuccessResult(adminMenuService.getMenuByCurrentUser());
     }
 
-//    @GetMapping("/api/menu")
-//    public List<AdminMenu> menus() {
-//        return adminMenuService.getMenuByCurrentUser();
-//    }
+
 }

@@ -63,11 +63,10 @@ public class AdminMenuService {
                 if (!menus.contains(adminMenu)) {
                     System.out.println("要添加的Menu是: "+adminMenu);
                     menus.add(adminMenu);
-                    System.out.println("在menus数组里边添加了对应menu");
                 }
             });
         });
-        System.out.println("处理前的menus是: "+menus);
+//        System.out.println("处理前的menus是: "+menus);
         handleMenus(menus);
         System.out.println("现在的menus是: "+menus);
         return menus;
@@ -98,7 +97,7 @@ public class AdminMenuService {
         Iterator<AdminMenu>iterator=menus.iterator();
         while (iterator.hasNext()) {
             AdminMenu menu=iterator.next();
-            System.out.println("handleMenus里边的menu.getParentId是: "+menu.getParentId());
+//            System.out.println("handleMenus里边的menu.getParentId是: "+menu.getParentId());
             if (menu.getParentId() != 0) {
                iterator.remove();
             }

@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import xyz.taka8rie.finalback.dao.UserDAO;
 import xyz.taka8rie.finalback.pojo.User;
 
+import java.util.List;
+
 @Service
 public class UserService {
     @Autowired
@@ -20,10 +22,18 @@ public class UserService {
     }
 
     public User get(String username, String password,int accountType) {
-        //return userDAO.getByUsernameAndPasswordAndAccounttype(username, password,accounttype);
-        return userDAO.getByUsernameAndPasswordAndAccountType(username, password, accountType);
+       return userDAO.getByUsernameAndPasswordAndAccountType(username, password, accountType);
     }
+
     public void add(User user) {
         userDAO.save(user);
+    }
+
+    public User findByUsername(String username) {
+        return userDAO.findByUsername(username);
+    }
+
+    public List<User> findByUserId(int id) {
+        return userDAO.findAllById(id);
     }
 }

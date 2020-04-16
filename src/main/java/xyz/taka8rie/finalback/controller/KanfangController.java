@@ -41,6 +41,17 @@ public class KanfangController {
         return kanfangService.listByTenantNumberToKanFang(user.getId());
     }
 
+    //后台管理员查看所有预约订单
+    @CrossOrigin
+    @GetMapping("api/allyuyues")
+    public List<Kanfang> allYuyue() {
+        System.out.println("进入admin查看所有预约订单的方法");
+        return kanfangService.listAllyuyue();
+    }
+
+
+
+
     //后台删除预约订单
     @CrossOrigin
     @PostMapping("api/deleteyuyue")

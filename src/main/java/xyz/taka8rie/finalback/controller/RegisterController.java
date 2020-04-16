@@ -2,11 +2,15 @@ package xyz.taka8rie.finalback.controller;
 
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.hibernate.annotations.NaturalId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
+import xyz.taka8rie.finalback.Service.AdminLoginRoleService;
 import xyz.taka8rie.finalback.Service.UserService;
+import xyz.taka8rie.finalback.dao.AdminLoginRoleDAO;
+import xyz.taka8rie.finalback.pojo.AdminLoginRole;
 import xyz.taka8rie.finalback.result.Result;
 import xyz.taka8rie.finalback.pojo.User;
 import xyz.taka8rie.finalback.result.ResultFactory;
@@ -15,8 +19,10 @@ import xyz.taka8rie.finalback.result.ResultFactory;
 public class RegisterController {
     @Autowired
     UserService userService;
+    @Autowired
+    AdminLoginRoleService adminLoginRoleService;
 
-    @CrossOrigin //暂时去掉，结果未知 4/7
+    @CrossOrigin //暂时去掉
     @PostMapping(value = "api/register")
 //    @ResponseBody
     //这里的返回值Result为新增的result包里边的Result 4/4
@@ -44,7 +50,12 @@ public class RegisterController {
         user.setSalt(salt);
         user.setPassword(encodedPassword);
         userService.add(user);
-        System.out.println("后端注册流程倒数第一步");
+//       accountType: 3为房屋出租者,2为租户，1为管理员
+        if (user.getAccountType() !=1) {
+           System.out.println("AccountType是: "+user.getAccountType());
+            adminLoginRoleService.saveTypeToRole(user);
+        }
+
         return ResultFactory.buildSuccessResult(user);
     }
 

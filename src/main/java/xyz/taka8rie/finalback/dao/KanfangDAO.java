@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface KanfangDAO extends JpaRepository<Kanfang, Integer> {
     List<Kanfang> findAllByTenantNumber(int tenantNumber);
+    //列举出所有预约订单
 
 }

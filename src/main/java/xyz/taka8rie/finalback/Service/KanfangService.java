@@ -25,4 +25,9 @@ public class KanfangService {
     public void deleteByShowNumber(Kanfang kanfang) {
         kanfangDAO.deleteById(kanfang.getShowNumber());
     }
+
+    //列举出所有订单
+    public List<Kanfang> listAllyuyue() {
+        return kanfangDAO.findAll();
+    }
 }

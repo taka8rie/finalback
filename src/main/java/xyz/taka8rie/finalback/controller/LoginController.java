@@ -9,12 +9,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
 import xyz.taka8rie.finalback.Service.UserService;
+import xyz.taka8rie.finalback.dao.UserDAO;
 import xyz.taka8rie.finalback.pojo.User;
 import xyz.taka8rie.finalback.result.Result;
 import xyz.taka8rie.finalback.result.ResultFactory;
 
+import javax.persistence.Id;
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.ValidationEvent;
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -22,13 +25,16 @@ public class LoginController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    UserDAO userDAO;
+
     @CrossOrigin
     @PostMapping(value = "api/login")
     //    @ResponseBody
 
     public Result login(@RequestBody User requestUser) {
-        String username=requestUser.getUsername();
-        Subject subject= SecurityUtils.getSubject();
+        String username = requestUser.getUsername();
+        Subject subject = SecurityUtils.getSubject();
         //将类型转换为字符串
 //        int host=requestUser.getAccountType();
 //        System.out.println("登录时的账户类型为: "+host);//没有对账户类型进行检验
@@ -42,11 +48,11 @@ public class LoginController {
         }
     }
 
-//    @CrossOrigin
+    //    @CrossOrigin
     @GetMapping(value = "api/logout")
 //    @ResponseBody
     public Result logout() {
-        Subject subject=SecurityUtils.getSubject();
+        Subject subject = SecurityUtils.getSubject();
         subject.logout();
         String message = "已登出";
         return ResultFactory.buildSuccessResult(message);
@@ -57,7 +63,7 @@ public class LoginController {
         return "身份验证成功";
     }
 
-//    原来的可用代码
+    //    原来的可用代码
 //    public Result login(@RequestBody User requestUser, HttpSession session) {
 //       // 对 html 标签进行转义，防止 XSS 攻击
 //        String username=requestUser.getUsername();
@@ -75,4 +81,14 @@ public class LoginController {
 //            return new Result(200);
 //        }
 //    }
+    @CrossOrigin
+    @GetMapping(value = "api/alluserSearch")
+    public List<User> allUser(@RequestParam("keywords") int keywords) {
+//        if ("".equals(keywords)) {
+//            return null;
+//        }else{
+//            return userService.findByUserId(keywords);
+//        }
+        return userService.findByUserId(keywords);
+    }
 }

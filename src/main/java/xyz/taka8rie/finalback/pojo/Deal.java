@@ -1,11 +1,13 @@
 package xyz.taka8rie.finalback.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Date;
 
+@Data
 @Entity
 @Table(name="deal")
 @JsonIgnoreProperties({"handler","hibernateLazyInitializer"})

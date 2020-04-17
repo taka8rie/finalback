@@ -2,13 +2,22 @@ package xyz.taka8rie.finalback.controller;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.function.ServerResponse;
 import xyz.taka8rie.finalback.Service.KanfangService;
 import xyz.taka8rie.finalback.Service.UserService;
 import xyz.taka8rie.finalback.dao.KanfangDAO;
 import xyz.taka8rie.finalback.pojo.Kanfang;
 import xyz.taka8rie.finalback.pojo.User;
+import xyz.taka8rie.finalback.result.Result;
+import xyz.taka8rie.finalback.result.ResultFactory;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 @RestController
@@ -20,16 +29,23 @@ public class KanfangController {
     @Autowired
     KanfangDAO kanfangDAO;
 
+
     @CrossOrigin
     @PostMapping("api/kanfangadd")
-    public Kanfang add(@RequestBody Kanfang kanfang) {
+    public Result add(@RequestBody Kanfang kanfang) {
         System.out.println("进入看房controller");
         System.out.println("看房的时间是: " + kanfang.getSeeTime());
         String username = SecurityUtils.getSubject().getPrincipal().toString();
         User user = userService.findByUsername(username);
+
+        if (kanfangService.listRepeatKanfang(kanfang.getHouseNumber(), user.getId()) != null) {
+            System.out.println("说明scoreinfo表中已经有了预约看房的记录了");
+            return ResultFactory.buildFailResult("已经添加过改预约订单了");
+        }
+
         kanfang.setTenantNumber(user.getId());
         kanfangService.addKanfang(kanfang);
-        return kanfang;
+        return ResultFactory.buildFailResult("添加成功");
     }
 
     //后台租客查看自己的预约订单

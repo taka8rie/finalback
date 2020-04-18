@@ -65,8 +65,11 @@ public class MyWebConfigurer implements WebMvcConfigurer {
                 .excludePathPatterns("/index.html")
                 .excludePathPatterns("/api/login")
                 .excludePathPatterns("/api/logout")
+                .excludePathPatterns("/api/covers")
+                .excludePathPatterns("/api/homepage")
+                .excludePathPatterns("/api/houses")
+                .excludePathPatterns("/api/type/{cid}/houses")
+                .excludePathPatterns("/api/search")
                 .excludePathPatterns("/api/register");//允许跳到注册页面
-
-
     }
 }

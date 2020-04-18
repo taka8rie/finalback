@@ -31,7 +31,6 @@ public class LoginController {
     @CrossOrigin
     @PostMapping(value = "api/login")
     //    @ResponseBody
-
     public Result login(@RequestBody User requestUser) {
         String username = requestUser.getUsername();
         Subject subject = SecurityUtils.getSubject();
@@ -39,6 +38,7 @@ public class LoginController {
 //        int host=requestUser.getAccountType();
 //        System.out.println("登录时的账户类型为: "+host);//没有对账户类型进行检验
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, requestUser.getPassword());
+
         try {
             subject.login(usernamePasswordToken);
             return ResultFactory.buildSuccessResult(username);

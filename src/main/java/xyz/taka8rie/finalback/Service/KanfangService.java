@@ -30,4 +30,9 @@ public class KanfangService {
     public List<Kanfang> listAllyuyue() {
         return kanfangDAO.findAll();
     }
+
+    //租客反复添加预约看房请求
+    public Kanfang listRepeatKanfang(int houseNumber,int tenantNumber) {
+        return kanfangDAO.findAllByHouseNumberAndTenantNumber(houseNumber, tenantNumber);
+    }
 }

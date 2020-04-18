@@ -64,8 +64,6 @@ public class DealController {
         nowHouse.setTenentClaim(deal.getClaim());//写入租客对该房屋的评价。
         nowHouse.setIsOrder(1);
         houseDAO.save(nowHouse);
-
-
         System.out.println("成功添加订单");
         return deal;
     }
@@ -73,15 +71,20 @@ public class DealController {
     //尝试实现租客按类型展示未出租的房屋里边的分类功能,复制了HouseController部分的按类查询
     @CrossOrigin
     @GetMapping("api/type/{value}/deals")
-    public List<House> listByType(@PathVariable("value") int value) {
-        System.out.println("这里是租客部分按类查询方法");
+    public List<House> listByType(@PathVariable("value") String value) {
+        System.out.println("这里是DealController的分类查询方法");
         System.out.println("进入了api/type/{value}/deals方法");
         System.out.println("value的值是: " + value);
-        if (value != 0) {
-            return houseService.TypeNotOrder(value);
-        } else {//当类型为"全部"时,返回未出租的房屋
-            return houseService.notOrderHouse(0);
+        //字符串的比较不应该用!=,应用equals
+        if ("全部".equals(value) ) {
+            //应该返回的是某种类型的房屋，现在返回所有类型的房屋了
+            System.out.println("进入cid 的if 方法");
+//            return houseService.notOrderHouse(0);
+            return houseService.checkAndNotOrder();
         }
+        //返回value类型且未被订购的房屋
+//        return houseService.TypeNotOrder(value);
+        return houseService.checkAndNotOrderByType(value);
     }
 
 

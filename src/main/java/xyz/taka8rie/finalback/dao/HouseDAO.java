@@ -12,7 +12,7 @@ import java.security.PublicKey;
 import java.util.List;
 
 public interface HouseDAO extends JpaRepository<House,Integer> {
-    List<House> findAllByHouseType(int houseType);
+    List<House> findAllByHouseTypeLike(String houseType);//由int改为String 4.16
     List<House> findAllByHouseAddrLike(String keywords);
     //查找未审核房屋
     List<House> findAllByAdminCheck(int adminCheck);
@@ -33,6 +33,15 @@ public interface HouseDAO extends JpaRepository<House,Integer> {
     //在未出租的房屋里边搜索想要的房屋
     List<House> findAllByIsOrderAndHouseAddrLike(int id, String keyword);
 
-    //在未出租的房屋里边展示不同的类型
-    List<House> findAllByIsOrderAndHouseType(int id, int houseType);
+    //在未出租的房屋里边展示不同的类型 //由int改为String 4.16
+    List<House> findAllByIsOrderAndHouseTypeLike(int id, String houseType);
+
+    //显示已经审查过并且没有被下订单的所有房屋
+    List<House> findAllByIsOrderAndAdminCheck(int id, int adminCheck);
+
+    //显示已经审查过并且没有被下订单,根据类型来显示的房屋
+    List<House> findAllByIsOrderAndAdminCheckAndHouseTypeLike(int isOrderId, int adminCheck, String houseType);
+
+    //显示已通过审核且没有被下订单,根据房屋地址来显示的房屋
+    List<House> findAllByIsOrderAndAdminCheckAndHouseAddrLike(int isOrderId, int adminCheck, String houseAddr);
 }

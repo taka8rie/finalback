@@ -3,6 +3,7 @@ package xyz.taka8rie.finalback.controller;
 import com.sun.org.apache.xpath.internal.compiler.Keywords;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.elasticsearch.annotations.MultiField;
 import org.springframework.data.redis.connection.ReactiveSubscription;
 import org.springframework.stereotype.Controller;
@@ -41,11 +42,14 @@ public class HouseController {
     @CrossOrigin
     @PostMapping("api/houses")
     public House addOrUpdate(@RequestBody House house) {
-        System.out.println("这里是添加修改房屋方法");
         //将当前房主的ID作为房屋的ownerNumber.
         String username=SecurityUtils.getSubject().getPrincipal().toString();
         User user = userService.findByUsername(username);
-        house.setOwnerNumber(user.getId());
+        System.out.println("这里是添加修改房屋方法,获取到的用户类型为: "+user.getAccountType());
+        System.out.println("这里是添加修改房屋方法,获取到的用户ID为: "+user.getId());
+        if (user.getAccountType() != 1) {
+            house.setOwnerNumber(user.getId());
+        }
         houseService.addOrUpdate(house);
         System.out.println("添加修改成功");
         return house;
@@ -59,19 +63,23 @@ public class HouseController {
         houseService.deleteById(house);
     }
 
-    @CrossOrigin   //这里的返回已修正，查询功能可用
+    //此处返回所有的房屋类型,对应选项:"房子"
+    @CrossOrigin   //这里的返回已修正，查询功能可用 //由int改为String 4.16
     @GetMapping("api/type/{cid}/houses")
-    public List<House> listByType(@PathVariable("cid") int cid) {
+    public List<House> listByType(@PathVariable("cid") String cid) {
+        System.out.println("这里是HouseController的分类查询方法");
         System.out.println("进入了api/type/{cid}/houses方法");
         System.out.println("cid的值是: " + cid);
-        if (cid != 0) {
+        if ("全部".equals(cid) ) {
             //应该返回的是某种类型的房屋，现在返回所有类型的房屋了
             // return houseService.list(cid);
-            return houseService.list(cid);
-        } else {
-            //return list();//这里是否不对？改为null试试
-            return list();
+//            return houseService.list(cid);
+            System.out.println("进入cid 的if 方法");
+            return houseService.listallHouse();
         }
+            //return list();//这里是否不对？改为null试试
+        return houseService.list(cid);
+
     }
 
 //    //分类查询出没有被出租的房屋 4.15 已经在DealController里实现。
@@ -99,12 +107,13 @@ public class HouseController {
         }
     }
 
-    //搜索出未被出租的房屋(租客界面用)
+    //根据住址搜索出未被出租且通过审核的房屋(租客界面用)
     @CrossOrigin
     @GetMapping(value = "/api/searchIsOrder")
     public List<House> searchIsOrders(@RequestParam("keywords") String keywords) {
         if ("".equals(keywords)) {
-            return houseService.notOrderHouse(0);
+//            return houseService.notOrderHouse(0);
+            return houseService.checkAndNotOrder();
         }else {
             return houseService.SearchNotOrder(keywords);
         }
@@ -114,7 +123,6 @@ public class HouseController {
     @CrossOrigin
     @PostMapping(value = "/api/covers")
     public String coverUpload(MultipartFile file) {
-
         String folder = "C:/temp/img";
         File imageFolder = new File(folder);
         File f = new File(imageFolder, StringUtils.getRandomString(6) + file.getOriginalFilename()
@@ -133,6 +141,7 @@ public class HouseController {
         }
     }
 
+    //这里没有校验!!
     @CrossOrigin
     @GetMapping("api/type/{value}/check")
     public List<House> listByCheck(@PathVariable("value") int value) {
@@ -176,6 +185,6 @@ public class HouseController {
     @GetMapping("api/notOrderHouses")
     @CrossOrigin
     public List<House> notOrderHouse() {
-        return houseService.notOrderHouse(0);
+        return houseService.checkAndNotOrder();
     }
 }

@@ -11,8 +11,9 @@ public class TTT {
 
     public TTT(String source, String target) {
 
+//        toCharArray() 方法将字符串转换为字符数组。
         for (Character sch : source.toCharArray()) {
-
+                //哈希表是否包含sch该字符
             if (vectorMap.containsKey(sch)) {
 
                 vectorMap.get(sch)[0]++;
@@ -100,5 +101,6 @@ public class TTT {
         System.out.println("==相似度===" + t2.sim());
         System.out.println("==相似度===" + t4.sim());
         System.out.println("==相似度===" + t3.sim());
+
     }
 }

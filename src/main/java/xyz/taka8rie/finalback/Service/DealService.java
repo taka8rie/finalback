@@ -22,8 +22,8 @@ public class DealService {
     }
 
     //实现租客按类型展示功能
-    public List<House> list(int type) {
-        return houseDAO.findAllByHouseType(type);
+    public List<House> list(String type) {
+        return houseDAO.findAllByHouseTypeLike(type);
     }
     //实现租客按类型展示功能
     public List<House> list() {

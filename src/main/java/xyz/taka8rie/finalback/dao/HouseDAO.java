@@ -44,4 +44,7 @@ public interface HouseDAO extends JpaRepository<House,Integer> {
 
     //显示已通过审核且没有被下订单,根据房屋地址来显示的房屋
     List<House> findAllByIsOrderAndAdminCheckAndHouseAddrLike(int isOrderId, int adminCheck, String houseAddr);
+
+    //4.23 尝试用list房屋号码查找房屋
+    List<House> findAllByHouseNumberIn(List<Integer> houseNumber);
 }

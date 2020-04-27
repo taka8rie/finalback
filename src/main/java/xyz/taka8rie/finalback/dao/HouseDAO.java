@@ -47,4 +47,12 @@ public interface HouseDAO extends JpaRepository<House,Integer> {
 
     //4.23 尝试用list房屋号码查找房屋
     List<House> findAllByHouseNumberIn(List<Integer> houseNumber);
+
+    //4.25 后台通过房屋号码来查找房屋,返回list
+    @Query(value = "select * from houseinfo where house_number=?1", nativeQuery = true)
+    List<House> adminSearchHouse(int houseNumber);
+
+    //4.26 按房主编号来查找其归属的未审核的房屋
+    List<House> findAllByOwnerNumberAndAdminCheck(int ownerNumber, int adminCheck);
+
 }

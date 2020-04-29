@@ -88,4 +88,13 @@ public class HouseService  {
         return houseDAO.findAllByIsOrderAndAdminCheckAndHouseTypeLike(0, 1, houseType);
     }
 
+    //使用房屋编号查询对应房屋
+    public List<House> listById(int houseNumber) {
+        return houseDAO.adminSearchHouse(houseNumber);
+    }
+
+    //查找某房主的未被审核的房屋
+    public List<House> onesNoChecked(int ownerNumber) {
+        return houseDAO.findAllByOwnerNumberAndAdminCheck(ownerNumber, 0);
+    }
 }

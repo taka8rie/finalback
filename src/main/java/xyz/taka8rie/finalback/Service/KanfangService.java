@@ -18,6 +18,7 @@ public class KanfangService {
         System.out.println("执行完了看房service的save操作");
     }
 
+
     public List<Kanfang> listByTenantNumberToKanFang(int tennantNumber) {
         return kanfangDAO.findAllByTenantNumber(tennantNumber);
     }
@@ -35,4 +36,8 @@ public class KanfangService {
     public Kanfang listRepeatKanfang(int houseNumber,int tenantNumber) {
         return kanfangDAO.findAllByHouseNumberAndTenantNumber(houseNumber, tenantNumber);
     }
+
+    //4.24 用于删除房屋后同时删除预约订单
+
+
 }

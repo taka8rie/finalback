@@ -47,6 +47,10 @@ public class DealService {
 
     // 删除订单 4.14
     public void deleteDeal(Deal deal) {
+        Deal temp = dealDAO.findAllByDealNumber(deal.getDealNumber());
+        int houseNumber=temp.getHouseNumber();
+        System.out.println("当前获得的房屋编号: "+houseNumber);
+        houseDAO.updateHouseStatus(houseNumber);
         dealDAO.deleteById(deal.getDealNumber());
     }
 }

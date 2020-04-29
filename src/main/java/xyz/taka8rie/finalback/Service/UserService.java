@@ -36,4 +36,19 @@ public class UserService {
     public List<User> findByUserId(int id) {
         return userDAO.findAllById(id);
     }
+
+    //忘记密码函数,输入用户名和电话后可修改密码
+    public User alterForgetPassword(String tel, String username) {
+        return userDAO.getAllByTelAndUsername(tel, username);
+    }
+
+    //获取所有用户
+    public List<User> findAllUser() {
+        return userDAO.findAll();
+    }
+
+    //4.26显示所有被冻结账户
+    public List<User> findAllFreezed(int freezed) {
+        return userDAO.findAllByFreeze(freezed);// 1为被冻结,0:正常账户
+    }
 }

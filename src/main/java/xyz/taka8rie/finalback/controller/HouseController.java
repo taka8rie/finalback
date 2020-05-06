@@ -1,37 +1,27 @@
 package xyz.taka8rie.finalback.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.sun.org.apache.xpath.internal.compiler.Keywords;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.elasticsearch.annotations.MultiField;
-import org.springframework.data.redis.connection.ReactiveSubscription;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import xyz.taka8rie.finalback.Service.DealService;
 import xyz.taka8rie.finalback.Service.HouseService;
 import xyz.taka8rie.finalback.Service.KanfangService;
 import xyz.taka8rie.finalback.Service.UserService;
 import xyz.taka8rie.finalback.dao.DealDAO;
 import xyz.taka8rie.finalback.dao.KanfangDAO;
-import xyz.taka8rie.finalback.pojo.House;
-import xyz.taka8rie.finalback.pojo.Rows;
-import xyz.taka8rie.finalback.pojo.User;
+import xyz.taka8rie.finalback.pojo.*;
 import xyz.taka8rie.finalback.result.Result;
 import xyz.taka8rie.finalback.result.ResultFactory;
 import xyz.taka8rie.finalback.utils.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Type;
 
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -130,18 +120,7 @@ public class HouseController {
 
     }
 
-//    //分类查询出没有被出租的房屋 4.15 已经在DealController里实现。
-//    @CrossOrigin
-//    @GetMapping("api/type/{cid}/notOrderHouses")
-//    public List<House> listByNotOrderHouses(@PathVariable("cid") int cid) {
-//        if (cid != 0) {
-//            return houseService.TypeNotOrder(cid);
-//        }
-//        else {//当类型为"全部"时,返回未出租的房屋
-//            return houseService.notOrderHouse(0);
-//        }
-//    }
-
+   //分类查询出没有被出租的房屋 4.15 已经在DealController里实现。
 
     //这里的value="/api/search"多了一个/，但是前边却不用写也可以，原因？
     @CrossOrigin
@@ -180,7 +159,7 @@ public class HouseController {
             file.transferTo(f);
             String imgURL = "http://localhost:8443/api/file/" + f.getName();
             System.out.println("这是上传图片函数的imgURL: " + imgURL);
-            System.out.println();
+//            System.out.println();
             return imgURL;
         } catch (IOException e) {
             e.printStackTrace();
@@ -255,21 +234,31 @@ public class HouseController {
     public List<House> myUncheckHouses() {
         String username=SecurityUtils.getSubject().getPrincipal().toString();
         User user = userService.findByUsername(username);
-        System.out.println("username " + username + " ownerid " + user.getId());
+//        System.out.println("username " + username + " ownerid " + user.getId());
         return houseService.onesNoChecked(user.getId());
     }
 
     //5.1 统计出租跟未出租的房屋,图表用
-    @GetMapping("api/statistics")
+    @PostMapping("api/statistics")
     @CrossOrigin
-    public List<Rows> sumHouse() {
-//        System.out.println("未出租的房屋数量为: "+houseService.noIsOrder(0));
+    public List<Rows> sumHouse(@RequestBody String valueTime) {
+        HouseTime time= JSONObject.parseObject(valueTime, HouseTime.class);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+        System.out.println(time.getValue1()[0]);
+        System.out.println(time.getValue1()[1]);
+
+        java.sql.Date Sdate0 = Date.valueOf(time.getValue1()[0]);
+        java.sql.Date Sdate1 = Date.valueOf(time.getValue1()[1]);
+//        System.out.println("由String转date的时间: "+Sdate0);
+        List<Deal> s = dealDAO.findAllByHandleTimeBetween(Sdate0, Sdate1);
+//        System.out.println("总数字: "+s.size());
+
         Rows rows=new Rows();
         rows.setName("未出租房屋");
         rows.setNumber(houseService.noIsOrder(0));
         Rows rox=new Rows();
         rox.setName("已出租房屋");
-        rox.setNumber(houseService.noIsOrder(1));
+        rox.setNumber(s.size());
         ArrayList temp=new ArrayList();
         temp.add(rows);
         temp.add(rox);

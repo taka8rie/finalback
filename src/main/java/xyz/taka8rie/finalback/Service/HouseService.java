@@ -97,4 +97,10 @@ public class HouseService  {
     public List<House> onesNoChecked(int ownerNumber) {
         return houseDAO.findAllByOwnerNumberAndAdminCheck(ownerNumber, 0);
     }
+
+    //5.1 返回出租跟未出租房屋的个数,用于统计
+    public Integer noIsOrder(int order) {
+       return houseDAO.countByIsOrder(order);
+    }
+
 }

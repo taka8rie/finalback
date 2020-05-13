@@ -51,4 +51,9 @@ public class UserService {
     public List<User> findAllFreezed(int freezed) {
         return userDAO.findAllByFreeze(freezed);// 1为被冻结,0:正常账户
     }
+
+    //5.1 后台显示用户图表
+    public Integer userChart(int accountType) {
+        return userDAO.countByAccountType(accountType);
+    }
 }

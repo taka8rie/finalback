@@ -15,6 +15,7 @@ public class Kanfang {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="show_number")
     int showNumber;
+
     Date seeTime;
     int houseNumber;
     int tenantNumber;

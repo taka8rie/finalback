@@ -36,4 +36,8 @@ public interface UserDAO extends JpaRepository<User, Integer> {
 
     //查找所有被冻结账户
     List<User> findAllByFreeze(int freezed);
+
+    //5.1 返回出租跟未出租房屋的个数,用于统计 0:未出租 1:已出租
+    Integer countByAccountType(int accountType);
+
 }

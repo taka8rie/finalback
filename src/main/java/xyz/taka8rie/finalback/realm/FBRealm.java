@@ -6,10 +6,14 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.omg.CORBA.OBJ_ADAPTER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import xyz.taka8rie.finalback.Service.UserService;
 import xyz.taka8rie.finalback.pojo.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class FBRealm extends AuthorizingRealm {
@@ -26,6 +30,16 @@ public class FBRealm extends AuthorizingRealm {
     //认证逻辑
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken Token) throws AuthenticationException {
+//        //4.25
+//        List<Object> pricipals = new ArrayList<Object>();
+//        String username=Token.getPrincipal().toString();
+//        User user = userService.getByname(username);
+//        pricipals.add(username);
+//        pricipals.add(user);
+//        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(pricipals,
+//                user.getPassword(), ByteSource.Util.bytes(user.getSalt()), this.getName());
+//        return info;
+        //以下验证可行
        String username=Token.getPrincipal().toString();
         User user = userService.getByname(username);
         if (ObjectUtils.isEmpty(user)) {

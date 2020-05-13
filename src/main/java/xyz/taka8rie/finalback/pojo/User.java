@@ -18,6 +18,9 @@ public class User {
     int accountType;//账号类型
     String salt;//加密用的盐。
     String tel;//用户的电话
+    int freeze;//4.25 用于冻结账户
+
+
 
     public String getSalt() {
         return salt;

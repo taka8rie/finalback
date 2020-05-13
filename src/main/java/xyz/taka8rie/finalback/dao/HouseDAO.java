@@ -2,6 +2,7 @@ package xyz.taka8rie.finalback.dao;
 
 import org.elasticsearch.client.license.LicensesStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,4 +56,16 @@ public interface HouseDAO extends JpaRepository<House,Integer> {
     //4.26 按房主编号来查找其归属的未审核的房屋
     List<House> findAllByOwnerNumberAndAdminCheck(int ownerNumber, int adminCheck);
 
+    //4.29 移除订单时,将该房屋的出租情况更新为未出租,0为未出租
+    @Transactional
+    @Modifying
+    @Query(value = "update houseinfo set is_order=0 where house_number=?1", nativeQuery = true)
+    void updateHouseStatus(int houseNumber);
+
+    //5.1 返回出租跟未出租房屋的个数,用于统计 0:未出租 1:已出租
+    Integer countByIsOrder(int isOrder);
+
+    //5.2 查看某个房屋的评价
+    @Query(value = "select tenent_claim from houseinfo where house_number=?1", nativeQuery = true)
+    String getHouseClaim(int houseNumber);
 }

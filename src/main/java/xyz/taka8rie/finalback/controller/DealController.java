@@ -61,7 +61,18 @@ public class DealController {
         //将租客的评价写入对应的房屋中...
         int houseNumber = deal.getHouseNumber();
         House nowHouse = houseDAO.findAllByHouseNumber(houseNumber);
-        nowHouse.setTenentClaim(deal.getClaim());//写入租客对该房屋的评价。
+        //5.2尝试拼接字符串,添加多个评论
+        String now=deal.getClaim();
+        String origin = houseDAO.getHouseClaim(houseNumber);
+        String end;
+        if (origin != null) {
+            origin=origin+"。"+now;
+        }else {
+            origin = now;
+        }
+        nowHouse.setTenentClaim(origin);
+
+//        nowHouse.setTenentClaim(deal.getClaim());//写入租客对该房屋的评价。5.2注释
         nowHouse.setIsOrder(1);
         houseDAO.save(nowHouse);
         System.out.println("成功添加订单");
@@ -111,11 +122,11 @@ public class DealController {
 
         String username = SecurityUtils.getSubject().getPrincipal().toString();
         User user = userService.findByUsername(username);
-        System.out.println("---------------------------");
-        System.out.println("到达Myrents");
-        System.out.println("username is " + username);
-        System.out.println(username + " 的ID号码是 : " + user.getId());
-        System.out.println("list的长度是 :" + dealService.listRent(user.getId()).size());
+//        System.out.println("---------------------------");
+//        System.out.println("到达Myrents");
+//        System.out.println("username is " + username);
+//        System.out.println(username + " 的ID号码是 : " + user.getId());
+//        System.out.println("list的长度是 :" + dealService.listRent(user.getId()).size());
         return dealService.listRent(user.getId());
     }
 

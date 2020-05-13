@@ -2,9 +2,11 @@ package xyz.taka8rie.finalback.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Data
@@ -21,12 +23,18 @@ public class House  {
     String houseType;
     int houseArea;
     String houseStatus;//由int改为String 4.16
+
+   @Temporal(TemporalType.DATE)//让前端显示到日
+//    @DateTimeFormat(pattern = "yyyy-MM-ss hh:MM:ss")
     Date lastupdateTime;
+
     BigDecimal soldPrice;//是否影响金钱精度尚未清楚。
     String addNote;
     String houseCover;
     int adminCheck;//0:未审核 1:已审核 由int改为String 4.16
     int isOrder;// 0:未被订购 1:已被订购
     String tenentClaim;//用户的评价
+
+
 
 }

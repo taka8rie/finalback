@@ -50,25 +50,25 @@ public class AdminMenuService {
         User user = userService.findByUsername(username);
         //获取当前用户对应的所有角色的id列表
         List<AdminLoginRole> loginRoleList = adminLoginRoleService.listAllByLid(user.getId());
-        System.out.println("查找出来的loginRoleList是: "+loginRoleList);
+//        System.out.println("查找出来的loginRoleList是: "+loginRoleList);
         List<AdminMenu> menus=new ArrayList<>();
 
         loginRoleList.forEach(lr->{
             List<AdminRoleMenu> rms = adminRoleMenuService.findAllByRid(lr.getRid());
-            System.out.println("查找出来的adminRoleMenu是: "+rms);
+//            System.out.println("查找出来的adminRoleMenu是: "+rms);
             rms.forEach(rm->{
                 AdminMenu adminMenu = adminMenuDAO.findById(rm.getMid());
-                System.out.println("得到的adminMenu是: "+adminMenu);
+                // System.out.println("得到的adminMenu是: "+adminMenu);
                 //防止多角色状态下菜单重复
                 if (!menus.contains(adminMenu)) {
-                    System.out.println("要添加的Menu是: "+adminMenu);
+                    //  System.out.println("要添加的Menu是: "+adminMenu);
                     menus.add(adminMenu);
                 }
             });
         });
 //        System.out.println("处理前的menus是: "+menus);
         handleMenus(menus);
-        System.out.println("现在的menus是: "+menus);
+        // System.out.println("现在的menus是: "+menus);
         return menus;
     }
 

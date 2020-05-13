@@ -9,6 +9,7 @@ import xyz.taka8rie.finalback.Service.HouseService;
 import xyz.taka8rie.finalback.Service.KanfangService;
 import xyz.taka8rie.finalback.Service.UserService;
 import xyz.taka8rie.finalback.dao.DealDAO;
+import xyz.taka8rie.finalback.dao.HouseDAO;
 import xyz.taka8rie.finalback.dao.KanfangDAO;
 import xyz.taka8rie.finalback.pojo.*;
 import xyz.taka8rie.finalback.result.Result;
@@ -40,6 +41,9 @@ public class HouseController {
 
     @Autowired
     DealDAO dealDAO;
+
+    @Autowired
+    HouseDAO houseDAO;
 
     //获取全部房屋,后台管理员用
     @GetMapping("api/houses")
@@ -126,10 +130,12 @@ public class HouseController {
     @CrossOrigin
     @GetMapping(value = "/api/search")
     public List<House> searchResult(@RequestParam("keywords") String keywords) {
+
         if ("".equals(keywords)) {
             return houseService.list();
         } else {
             return houseService.Search(keywords);
+
         }
     }
 
@@ -137,11 +143,14 @@ public class HouseController {
     @CrossOrigin
     @GetMapping(value = "/api/searchIsOrder")
     public List<House> searchIsOrders(@RequestParam("keywords") String keywords) {
+//        System.out.println("点击了搜索框");
         if ("".equals(keywords)) {
 //            return houseService.notOrderHouse(0);
             return houseService.checkAndNotOrder();
         } else {
-            return houseService.SearchNotOrder(keywords);
+//            return houseService.SearchNotOrder(keywords);
+//            List<House> temp=houseDAO.findAllByHouseAddrLike("%" + keywords + "%");
+            return houseDAO.findAllByHouseAddrLike("%" + keywords + "%");
         }
     }
 
@@ -244,8 +253,8 @@ public class HouseController {
     public List<Rows> sumHouse(@RequestBody String valueTime) {
         HouseTime time= JSONObject.parseObject(valueTime, HouseTime.class);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
-        System.out.println(time.getValue1()[0]);
-        System.out.println(time.getValue1()[1]);
+//        System.out.println(time.getValue1()[0]);
+//        System.out.println(time.getValue1()[1]);
 
         java.sql.Date Sdate0 = Date.valueOf(time.getValue1()[0]);
         java.sql.Date Sdate1 = Date.valueOf(time.getValue1()[1]);

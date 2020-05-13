@@ -16,4 +16,5 @@ public class ResultFactory {
     public static Result buildResult(int resultCode, String message, Object data) {
         return new Result(resultCode, message, data);
     }
+
 }

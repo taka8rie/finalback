@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @SpringBootConfiguration
+//@Configuration
 public class MyWebConfigurer implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -70,6 +71,9 @@ public class MyWebConfigurer implements WebMvcConfigurer {
                 .excludePathPatterns("/api/houses")
                 .excludePathPatterns("/api/type/{cid}/houses")
                 .excludePathPatterns("/api/search")
+                .excludePathPatterns("/api/forgetpassword")
+                .excludePathPatterns("/api/sendAllWebSocket")//webSocket通信
+                .excludePathPatterns("/api/file/**")//放行所有图片
                 .excludePathPatterns("/api/register");//允许跳到注册页面
     }
 }

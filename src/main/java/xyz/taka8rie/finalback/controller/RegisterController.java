@@ -107,6 +107,11 @@ public class RegisterController {
         User tempUser = userService.alterForgetPassword(tel, username);
 //        System.out.println("匹配到的tempUser账号是:"+tempUser.getUsername());
 //        System.out.println("匹配到的tempUser密码是:"+tempUser.getPassword());
+        if (tempUser == null) {
+            String message = "请检查用户名和手机号是否填写错误！";
+            return ResultFactory.buildFailResult(message);
+        }
+
         //生成盐,默认长度16位
         String salt=new SecureRandomNumberGenerator().nextBytes().toString();
         System.out.println("新生成的盐:"+salt);

@@ -1,5 +1,7 @@
 package xyz.taka8rie.finalback.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import io.netty.handler.codec.json.JsonObjectDecoder;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.hibernate.annotations.NaturalId;
@@ -26,21 +28,20 @@ public class RegisterController {
     @PostMapping(value = "api/register")
 //    @ResponseBody
     //这里的返回值Result为新增的result包里边的Result 4/4
-    public Result register(@RequestBody User user) {
+    public Result register(@RequestBody String info) {
+        User user = JSONObject.parseObject(info, User.class);
         String username=user.getUsername();
         String password=user.getPassword();
-//        System.out.println("register username : "+username);
-//        System.out.println("register password : "+password);
-//        System.out.println("register type : "+user.getAccountType());
-//        System.out.println("register tel: "+user.getTel());
 
         username = HtmlUtils.htmlEscape(username);
-//        int accountType=user.getAccountType();//由String转换回int 4/7
-//        System.out.println("accountType is "+accountType);
+
         user.setUsername(username);
+
         //添加电话号码
-        user.setTel(user.getTel());
-//        user.setAccountType(accountType);//由String转回int
+        String originTel=user.getTel();
+        user.setTel(originTel);
+
+
         boolean exist = userService.isExist(username);
         if (exist) {
             String message = "该用户名已被占用";
@@ -52,7 +53,14 @@ public class RegisterController {
         int times=2;
         //得到的密码
         String encodedPassword = new SimpleHash("md5", password, salt, times).toString();
+
+        //获取口令，并进行加密
+        String originToken=user.getForgetToken();
+        String encodedToken=new SimpleHash("md5",originToken,salt,times).toString();
+        user.setForgetToken(encodedToken);
+
         user.setSalt(salt);
+        user.setForgetSalt(salt);
         user.setPassword(encodedPassword);
         if (user.getAccountType() != 0){
             userService.add(user);
@@ -94,19 +102,26 @@ public class RegisterController {
     @CrossOrigin
     @PostMapping(value = "api/forgetpassword")
     public Result forGet(@RequestBody User user) {
+        //设置hash的算法迭代次数
+        int times=2;
+
         if (user.getUsername() == null||user.getPassword()==null) {
             String message = "请将信息填写完整";
             return ResultFactory.buildFailResult(message);
         }
         String username=user.getUsername();
         String newPassword=user.getPassword();
-        String tel=user.getTel();
-//        System.out.println("忘记密码函数所得到的用户名:"+username);
-//        System.out.println("忘记密码函数所得到的新密码:"+newPassword);
-//        System.out.println("忘记密码函数所得到的电话号码:"+tel);
-        User tempUser = userService.alterForgetPassword(tel, username);
-//        System.out.println("匹配到的tempUser账号是:"+tempUser.getUsername());
-//        System.out.println("匹配到的tempUser密码是:"+tempUser.getPassword());
+//        String tel=user.getTel();
+        String forgetToken=user.getForgetToken();
+
+        User forgetUser = userService.findByUsername(user.getUsername());
+        String forgetUserSalt=forgetUser.getForgetSalt();
+        System.out.println("获取到该用户名数据库对应的盐(修改密码成功前的盐) "+forgetUserSalt);
+        String tempToken=new SimpleHash("md5",forgetToken,forgetUserSalt,times).toString();
+
+        User tempUser = userService.alterForgetPassword(tempToken, username);
+//        User tempUser = userService.alterForgetPassword(tel, username);
+
         if (tempUser == null) {
             String message = "请检查用户名和手机号是否填写错误！";
             return ResultFactory.buildFailResult(message);
@@ -115,8 +130,7 @@ public class RegisterController {
         //生成盐,默认长度16位
         String salt=new SecureRandomNumberGenerator().nextBytes().toString();
         System.out.println("新生成的盐:"+salt);
-        //设置hash的算法迭代次数
-        int times=2;
+
         //得到的密码
         String encodedPassword = new SimpleHash("md5", newPassword, salt, times).toString();
         tempUser.setSalt(salt);

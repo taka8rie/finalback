@@ -19,7 +19,8 @@ public class User {
     String salt;//加密用的盐。
     String tel;//用户的电话
     int freeze;//4.25 用于冻结账户
-
+    String forgetToken;//5.14找回密码的口令
+    String forgetSalt;//5.14存放口令的盐
 
 
     public String getSalt() {

@@ -21,6 +21,7 @@ public interface UserDAO extends JpaRepository<User, Integer> {
 
     //忘记密码,检验用户名和手机号是否跟数据库一致,是则返回该用户
     User getAllByTelAndUsername(String tel, String username);
+    User getAllByForgetTokenAndUsername(String forgetToken, String username);
 
     //对冻结属性进行更改,使用jpa框架,要在Repository层的方法中加上这两段注解：
     @Transactional

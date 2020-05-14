@@ -38,8 +38,12 @@ public class UserService {
     }
 
     //忘记密码函数,输入用户名和电话后可修改密码
-    public User alterForgetPassword(String tel, String username) {
-        return userDAO.getAllByTelAndUsername(tel, username);
+//    public User alterForgetPassword(String tel, String username) {
+//        return userDAO.getAllByTelAndUsername(tel, username);
+//    }
+    //忘记密码函数,输入口令和账户名后可修改密码
+    public User alterForgetPassword(String token, String username) {
+        return userDAO.getAllByForgetTokenAndUsername(token, username);
     }
 
     //获取所有用户

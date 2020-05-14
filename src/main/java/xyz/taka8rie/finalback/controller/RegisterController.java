@@ -116,7 +116,7 @@ public class RegisterController {
 
         User forgetUser = userService.findByUsername(user.getUsername());
         String forgetUserSalt=forgetUser.getForgetSalt();
-        System.out.println("获取到该用户名数据库对应的盐(修改密码成功前的盐) "+forgetUserSalt);
+//        System.out.println("获取到该用户名数据库对应的盐(修改密码成功前的盐) "+forgetUserSalt);
         String tempToken=new SimpleHash("md5",forgetToken,forgetUserSalt,times).toString();
 
         User tempUser = userService.alterForgetPassword(tempToken, username);
@@ -129,12 +129,12 @@ public class RegisterController {
 
         //生成盐,默认长度16位
         String salt=new SecureRandomNumberGenerator().nextBytes().toString();
-        System.out.println("新生成的盐:"+salt);
+//        System.out.println("新生成的盐:"+salt);
 
         //得到的密码
         String encodedPassword = new SimpleHash("md5", newPassword, salt, times).toString();
         tempUser.setSalt(salt);
-        System.out.println("存入的盐:"+salt);
+//        System.out.println("存入的盐:"+salt);
         tempUser.setPassword(encodedPassword);
         userService.add(tempUser);
         return ResultFactory.buildSuccessResult("修改密码成功");

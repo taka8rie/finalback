@@ -113,17 +113,21 @@ public class RegisterController {
         String newPassword=user.getPassword();
 //        String tel=user.getTel();
         String forgetToken=user.getForgetToken();
-
+        //通过用户的名字找数据库中是否有该用户，如果有该用户则获取其用于给口令加密的盐
         User forgetUser = userService.findByUsername(user.getUsername());
+        if (forgetUser == null) {
+            String message = "请检查用户名是否填写正确！";
+            return ResultFactory.buildFailResult(message);
+        }
         String forgetUserSalt=forgetUser.getForgetSalt();
-//        System.out.println("获取到该用户名数据库对应的盐(修改密码成功前的盐) "+forgetUserSalt);
+        //将口令和用于给口令加密的盐进行哈希运算，得到加密过的口令
         String tempToken=new SimpleHash("md5",forgetToken,forgetUserSalt,times).toString();
-
+        //如果加密过的口令跟数据库中已存在的口令一致，那么允许修改密码，将密码进再一次加盐添加入该用户名中
         User tempUser = userService.alterForgetPassword(tempToken, username);
 //        User tempUser = userService.alterForgetPassword(tel, username);
 
         if (tempUser == null) {
-            String message = "请检查用户名和手机号是否填写错误！";
+            String message = "请检查用户名和口令是否填写正确！";
             return ResultFactory.buildFailResult(message);
         }
 
